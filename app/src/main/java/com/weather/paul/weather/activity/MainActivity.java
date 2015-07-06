@@ -1,9 +1,20 @@
-package com.weather.paul.weather;
+package com.weather.paul.weather.activity;
 
+import android.app.ListFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.weather.paul.weather.R;
+import com.weather.paul.weather.fragment.MainFragment;
+import com.weather.paul.weather.network.RetrofitService;
+import com.weather.paul.weather.service.WeatherApiService;
+
+import retrofit.RestAdapter;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -11,7 +22,20 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_main);
+
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragment_main);
+
+        if (fragment == null) {
+            fragment = new MainFragment();
+            fm.beginTransaction()
+                    .add(R.id.fragment_main, fragment)
+                    .commit();
+        }
+
+        initRequest();
+
     }
 
     @Override
@@ -35,4 +59,13 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void initRequest() {
+        new WeatherApiService().execute("init");
+
+
+
+
+    }
+
 }
